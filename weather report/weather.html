@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>WEATHER REPORTING</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        *{
+            margin: 0;
+        }
+        #back{
+            background-image: url(./pexels-hikaique-125510.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 703px;
+        }
+        #opacity{
+            opacity: 0.9;
+            background-color: black;
+            width: 100%;
+            height: 703px;
+
+        }
+        #content{
+            width: 100%;
+            height: 703px;
+            /* background-color: skyblue; */
+            text-align: center; 
+        }
+        #weatherhead{
+            color: yellow;
+            font-weight: bolder;
+            font-size: 40px;
+            padding-top: 2%;
+            letter-spacing: 1px;
+            word-spacing: 15px;
+        }
+        #searchindex{
+            height: 6%;
+            width: 17%;
+            margin-top: 3%;
+            background-color: white;
+            border: none;
+            border-radius: 50px;
+            text-align: center;
+            font-size: larger;
+            font-weight: bolder;
+        }
+        #button{
+            margin-top: 2%;
+            height: 4%;
+            width: 7%;
+            border-radius: 50px;
+            border: none;
+            color: black;
+            font-weight: bolder;
+            cursor: pointer;
+            background-color: lightskyblue;
+        }
+        #despic{
+            margin-top: 2%;
+            width: 18%;
+            height: 25%;
+            border-radius: 15px;
+        }
+        #cityname{
+            color:yellow;
+            font-size: 35px;
+            margin-top: 1%;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            /* display: none; */
+        }
+        #destext{
+            margin-top: 3%;
+            font-size: 25px;
+            color: white;
+            position: absolute;
+            left: 41%;
+            /* display: none; */
+        }
+        #desvalue{
+            padding-left: 10px;
+            color: yellow;
+        }
+
+        #temptext{
+        color: white;
+        font-size: 25px;
+        position: absolute;
+        left: 41%;
+        margin-top: 6%;
+        /* display: none; */
+        }
+        #tempvalue{
+            padding-left: 10px;
+            color: yellow;
+        }
+        #humtext{
+        color: white;
+        font-size: 25px;
+        position: absolute;
+        left: 41%;
+        margin-top: 9%;
+        /* display: none; */
+        }
+        #humvalue{
+            padding-left: 10px;
+            color: yellow;
+        }
+        #colanone{
+            padding-left: 27px;
+        }
+        #colantwo{
+            margin-left: 10px;
+        }
+        #colanthree{
+            margin-left: 65px;
+        }
+        .degree{
+            color: yellow;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="back">
+    <div id="opacity">
+    <div id="container">
+    <div id="content">
+        <p id="weatherhead">WEATHER REPORTING MANAGER</p>
+        <input type="text" id="searchindex" placeholder="search city"/>
+        <br/>
+        <button id="button" onclick="searchCity()" >SEARCH</button>
+        <br/>
+        <img src="https://openweathermap.org/img/wn/10d@2x.png" id="despic">
+        <p id="cityname">CITY NAME</p>
+        <p id="destext">DESCRIPTION <span id="colanone">:</span> <span id="desvalue">sunny</span></p>
+        <p id="temptext">TEMPERATURE <span id="colantwo">:</span> <span id="tempvalue">20</span><span class="degree">&nbsp;°C</span></p>
+        <p id="humtext">HUMIDITY <span id="colanthree">:</span> <span id="humvalue">20</span><span class="degree">&nbsp;%</span></p>
+
+    </div>
+    </div>
+    </div>
+    </div>
+
+
+
+    <script>
+
+        let getWeather = async(city)=>{
+            let weatherAPI = 'https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=9d47375bb3f8f0a32f9f5bef1eb4c0d8&units=metric';
+            let weatherobj = await fetch(weatherAPI)
+            let response = weatherobj.json()
+            return response
+        }
+
+        async function searchCity () {
+            const city = document.getElementById('searchindex').value
+            getWeather(city)
+            .then((response)=>{
+                console.log(response)
+                document.getElementById('cityname').innerText = response.name;
+                document.getElementById('desvalue').innerText = response.weather[0].description;
+                document.getElementById('despic').src = `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`;
+                document.getElementById('tempvalue').innerText = response.main.temp;
+                document.getElementById('humvalue').innerText = response.main.humidity;
+            })
+            .catch((err)=>{
+                document.getElementById('cityname').innerText = "CITY UNKNOWN"
+                document.getElementById('desvalue').innerText = "-"
+                document.getElementById('tempvalue').innerText = "-"
+                document.getElementById('humvalue').innerText = "-"
+                document.getElementById('despic').src = "no_record.jpg"
+            })
+            document.getElementById('searchindex').value=" "
+            
+
+
+        }
+    </script>
+    
+</body>
+</html>
